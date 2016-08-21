@@ -5,7 +5,7 @@ define(["require", "exports"], function (require, exports) {
         function Treemap() {
         }
         Treemap.prototype.attached = function () {
-            var w = 1280 - 80, h = 800 - 180, x = d3.scaleLinear().range([0, w]), y = d3.scaleLinear().range([0, h]), color = d3.scale.category20c(), root, node;
+            var w = 1280 - 80, h = 800 - 180, x = d3.scaleLinear().range([0, w]), y = d3.scaleLinear().range([0, h]), color = d3.schemeCategory20c(), root, node;
             var treemap = d3.layout.treemap()
                 .round(false)
                 .size([w, h])
