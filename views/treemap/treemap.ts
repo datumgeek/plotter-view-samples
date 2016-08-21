@@ -1,96 +1,52 @@
-///<reference path="../../typings/d3/d3.d.ts" />
+let d3 = (<any>window).d3;
 
 export class Treemap {
     attached() {
-        var w = 1280 - 80,
-            h = 800 - 180,
-            x = d3.scaleLinear().range([0, w]),
-            y = d3.scaleLinear().range([0, h]),
-            color = d3.scale.category20c(),
-            root,
-            node;
+        var margin = { top: 40, right: 10, bottom: 10, left: 10 },
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+        var color = d3.scale.category20c();
 
         var treemap = d3.layout.treemap()
-            .round(false)
-            .size([w, h])
-            .value(function (d: any) { return d.size; });
-        treemap.sticky(true);
+            .size([width, height])
+            .sticky(true)
+            .value(function (d) { return d.size; });
 
-        var svg = d3.select("#body").append("div")
-            .attr("class", "treemap-chart")
-            .style("width", w + "px")
-            .style("height", h + "px")
-            .append("svg:svg")
-            .attr("width", w)
-            .attr("height", h)
-            .append("svg:g")
-            .attr("transform", "translate(.5,.5)");
+        var div = d3.select("#treemap-body").append("div")
+            .style("position", "relative")
+            .style("width", (width + margin.left + margin.right) + "px")
+            .style("height", (height + margin.top + margin.bottom) + "px")
+            .style("left", margin.left + "px")
+            .style("top", margin.top + "px");
 
-        let data = this.getData();
+        let root = this.getData();
 
-        node = root = data;
+        var node = div.datum(root).selectAll(".treemap-node")
+            .data(treemap.nodes)
+            .enter().append("div")
+            .attr("class", "treemap-node")
+            .call(position)
+            .style("background", function (d) { return d.children ? color(d.name) : null; })
+            .text(function (d) { return d.children ? null : d.name; });
 
-        var nodes = treemap.nodes(root)
-            .filter(function (d) { return !d.children; });
+        d3.selectAll("input").on("change", function change() {
+            var value = this.value === "count"
+                ? function () { return 1; }
+                : function (d) { return d.size; };
 
-        var cell = svg.selectAll("g")
-            .data(nodes)
-            .enter().append("svg:g")
-            .attr("class", "cell")
-            .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
-            .on("click", function (d) { return zoom(node == d.parent ? root : d.parent); });
-
-        cell.append("svg:rect")
-            .attr("width", function (d) { return d.dx - 1; })
-            .attr("height", function (d) { return d.dy - 1; })
-            .attr("class", "treemap")
-            .style("fill", function (d: any) { return color(d.parent.name); });
-
-        cell.append("svg:text")
-            .attr("x", function (d) { return d.dx / 2; })
-            .attr("y", function (d) { return d.dy / 2; })
-            .attr("dy", ".35em")
-            .attr("text-anchor", "middle")
-            .attr("class", "treemap")
-            .text(function (d: any) { return d.name; })
-            .style("opacity", function (d: any) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
-
-        d3.select(window).on("click", function () { zoom(root); });
-
-        d3.select("select").on("change", function () {
-            treemap.value(this.value == "size" ? size : count).nodes(root);
-            zoom(node);
-
+            node
+                .data(treemap.value(value).nodes)
+                .transition()
+                .duration(1500)
+                .call(position);
         });
 
-        function size(d) {
-            return d.size;
-        }
-
-        function count(d) {
-            return 1;
-        }
-
-        function zoom(d) {
-            var kx = w / d.dx, ky = h / d.dy;
-            x.domain([d.x, d.x + d.dx]);
-            y.domain([d.y, d.y + d.dy]);
-
-            var t = svg.selectAll("g.cell").transition()
-                .duration((<any>d3.event).altKey ? 7500 : 750)
-                .attr("transform", function (d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
-
-            t.select("rect")
-                .attr("width", function (d) { return kx * d.dx - 1; })
-                .attr("height", function (d) { return ky * d.dy - 1; })
-
-            t.select("text")
-                .attr("x", function (d) { return kx * d.dx / 2; })
-                .attr("y", function (d) { return ky * d.dy / 2; })
-                .style("opacity", function (d) { return kx * d.dx > d.w ? 1 : 0; });
-
-            node = d;
-            (<any>d3.event).stopPropagation();
+        function position() {
+            this.style("left", function (d) { return d.x + "px"; })
+                .style("top", function (d) { return d.y + "px"; })
+                .style("width", function (d) { return Math.max(0, d.dx - 1) + "px"; })
+                .style("height", function (d) { return Math.max(0, d.dy - 1) + "px"; });
         }
     }
 

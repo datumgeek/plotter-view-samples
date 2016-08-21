@@ -1,11 +1,17 @@
-.treemap-chart {
-  display: block;
-  margin: auto;
-  margin-top: 40px;
+form.treemap {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
-text.treemap {
-  font-size: 11px;
+.treemap-node {
+  border: solid 1px white;
+  font: 10px sans-serif;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
 }
-rect.treemap {
-  fill: none;
+#treemap-body {
+  width: 100%;
+  height: 100%;
 }
