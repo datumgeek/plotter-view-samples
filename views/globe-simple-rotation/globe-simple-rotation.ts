@@ -1,5 +1,5 @@
 export class GlobeSimpleRotation {
-    activate() {
+    attached() {
         (<any>window).require([
       "esri/Map",
       "esri/views/SceneView",

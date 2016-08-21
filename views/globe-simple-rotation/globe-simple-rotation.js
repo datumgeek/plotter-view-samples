@@ -3,7 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var GlobeSimpleRotation = (function () {
         function GlobeSimpleRotation() {
         }
-        GlobeSimpleRotation.prototype.activate = function () {
+        GlobeSimpleRotation.prototype.attached = function () {
             window.require([
                 "esri/Map",
                 "esri/views/SceneView",
