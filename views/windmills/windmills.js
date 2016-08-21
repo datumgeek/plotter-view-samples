@@ -72,7 +72,7 @@ define(["require", "exports"], function (require, exports) {
                  * Create a scene view
                  *********************/
                 var view = new SceneView({
-                    container: "viewDiv",
+                    container: "windmillsDiv",
                     map: map,
                     viewingMode: "global",
                     clippingArea: mapExtent,
