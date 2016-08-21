@@ -1,102 +1,79 @@
 ///<reference path="../../typings/d3/d3.d.ts" />
-
-export class Treemap {
-    attached() {
-        var w = 1280 - 80,
-            h = 800 - 180,
-            x = d3.scale.linear().range([0, w]),
-            y = d3.scale.linear().range([0, h]),
-            color = d3.scale.category20c(),
-            root,
-            node;
-
-        var treemap = d3.layout.treemap()
-            .round(false)
-            .size([w, h])
-            .value(function (d: any) { return d.size; });
-        treemap.sticky(true);
-
-        var svg = d3.select("#body").append("div")
-            .attr("class", "treemap-chart")
-            .style("width", w + "px")
-            .style("height", h + "px")
-            .append("svg:svg")
-            .attr("width", w)
-            .attr("height", h)
-            .append("svg:g")
-            .attr("transform", "translate(.5,.5)");
-
-        let data = this.getData();
-
-        node = root = data;
-
-        var nodes = treemap.nodes(root)
-            .filter(function (d) { return !d.children; });
-
-        var cell = svg.selectAll("g")
-            .data(nodes)
-            .enter().append("svg:g")
-            .attr("class", "cell")
-            .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
-            .on("click", function (d) { return zoom(node == d.parent ? root : d.parent); });
-
-        cell.append("svg:rect")
-            .attr("width", function (d) { return d.dx - 1; })
-            .attr("height", function (d) { return d.dy - 1; })
-            .attr("class", "treemap")
-            .style("fill", function (d: any) { return color(d.parent.name); });
-
-        cell.append("svg:text")
-            .attr("x", function (d) { return d.dx / 2; })
-            .attr("y", function (d) { return d.dy / 2; })
-            .attr("dy", ".35em")
-            .attr("text-anchor", "middle")
-            .attr("class", "treemap")
-            .text(function (d: any) { return d.name; })
-            .style("opacity", function (d: any) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
-
-        d3.select(window).on("click", function () { zoom(root); });
-
-        d3.select("select").on("change", function () {
-            treemap.value(this.value == "size" ? size : count).nodes(root);
-            zoom(node);
-
-        });
-
-        function size(d) {
-            return d.size;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    var Treemap = (function () {
+        function Treemap() {
         }
-
-        function count(d) {
-            return 1;
-        }
-
-        function zoom(d) {
-            var kx = w / d.dx, ky = h / d.dy;
-            x.domain([d.x, d.x + d.dx]);
-            y.domain([d.y, d.y + d.dy]);
-
-            var t = svg.selectAll("g.cell").transition()
-                .duration((<any>d3.event).altKey ? 7500 : 750)
-                .attr("transform", function (d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
-
-            t.select("rect")
-                .attr("width", function (d) { return kx * d.dx - 1; })
-                .attr("height", function (d) { return ky * d.dy - 1; })
-
-            t.select("text")
-                .attr("x", function (d) { return kx * d.dx / 2; })
-                .attr("y", function (d) { return ky * d.dy / 2; })
-                .style("opacity", function (d) { return kx * d.dx > d.w ? 1 : 0; });
-
-            node = d;
-            (<any>d3.event).stopPropagation();
-        }
-    }
-
-    getData() {
-        let data =
-            {
+        Treemap.prototype.attached = function () {
+            var w = 1280 - 80, h = 800 - 180, x = d3.scale.linear().range([0, w]), y = d3.scale.linear().range([0, h]), color = d3.scale.category20c(), root, node;
+            var treemap = d3.layout.treemap()
+                .round(false)
+                .size([w, h])
+                .value(function (d) { return d.size; });
+            treemap.sticky(true);
+            var svg = d3.select("#body").append("div")
+                .attr("class", "treemap-chart")
+                .style("width", w + "px")
+                .style("height", h + "px")
+                .append("svg:svg")
+                .attr("width", w)
+                .attr("height", h)
+                .append("svg:g")
+                .attr("transform", "translate(.5,.5)");
+            var data = this.getData();
+            node = root = data;
+            var nodes = treemap.nodes(root)
+                .filter(function (d) { return !d.children; });
+            var cell = svg.selectAll("g")
+                .data(nodes)
+                .enter().append("svg:g")
+                .attr("class", "cell")
+                .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
+                .on("click", function (d) { return zoom(node == d.parent ? root : d.parent); });
+            cell.append("svg:rect")
+                .attr("width", function (d) { return d.dx - 1; })
+                .attr("height", function (d) { return d.dy - 1; })
+                .attr("class", "treemap")
+                .style("fill", function (d) { return color(d.parent.name); });
+            cell.append("svg:text")
+                .attr("x", function (d) { return d.dx / 2; })
+                .attr("y", function (d) { return d.dy / 2; })
+                .attr("dy", ".35em")
+                .attr("text-anchor", "middle")
+                .attr("class", "treemap")
+                .text(function (d) { return d.name; })
+                .style("opacity", function (d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
+            d3.select(window).on("click", function () { zoom(root); });
+            d3.select("select").on("change", function () {
+                treemap.value(this.value == "size" ? size : count).nodes(root);
+                zoom(node);
+            });
+            function size(d) {
+                return d.size;
+            }
+            function count(d) {
+                return 1;
+            }
+            function zoom(d) {
+                var kx = w / d.dx, ky = h / d.dy;
+                x.domain([d.x, d.x + d.dx]);
+                y.domain([d.y, d.y + d.dy]);
+                var t = svg.selectAll("g.cell").transition()
+                    .duration(d3.event.altKey ? 7500 : 750)
+                    .attr("transform", function (d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+                t.select("rect")
+                    .attr("width", function (d) { return kx * d.dx - 1; })
+                    .attr("height", function (d) { return ky * d.dy - 1; });
+                t.select("text")
+                    .attr("x", function (d) { return kx * d.dx / 2; })
+                    .attr("y", function (d) { return ky * d.dy / 2; })
+                    .style("opacity", function (d) { return kx * d.dx > d.w ? 1 : 0; });
+                node = d;
+                d3.event.stopPropagation();
+            }
+        };
+        Treemap.prototype.getData = function () {
+            var data = {
                 "name": "flare",
                 "children": [
                     {
@@ -475,8 +452,10 @@ export class Treemap {
                         ]
                     }
                 ]
-            }
-
-        return data;
-    }
-}
+            };
+            return data;
+        };
+        return Treemap;
+    }());
+    exports.Treemap = Treemap;
+});
