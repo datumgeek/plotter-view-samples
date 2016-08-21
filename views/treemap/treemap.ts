@@ -4,8 +4,8 @@ export class Treemap {
     attached() {
         var w = 1280 - 80,
             h = 800 - 180,
-            x = d3.scale.linear().range([0, w]),
-            y = d3.scale.linear().range([0, h]),
+            x = d3.scaleLinear().range([0, w]),
+            y = d3.scaleLinear().range([0, h]),
             color = d3.scale.category20c(),
             root,
             node;
