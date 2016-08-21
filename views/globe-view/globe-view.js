@@ -14,7 +14,7 @@ define(["require", "exports"], function (require, exports) {
                     ground: "world-elevation"
                 });
                 var view = new SceneView({
-                    container: "viewDiv",
+                    container: "globeDiv",
                     map: map,
                     scale: 50000000,
                     center: [-101.17, 21.78]
