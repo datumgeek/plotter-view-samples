@@ -1,5 +1,5 @@
 export class GlobeView {
-    activate() {
+    attached() {
         (<any>window).require([
             "esri/Map",
             "esri/views/SceneView",

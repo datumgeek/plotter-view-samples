@@ -1,5 +1,5 @@
 export class Windmills {
-    activate() {
+    attached() {
         (<any>window).require([
             "esri/core/declare",
             "esri/Map",

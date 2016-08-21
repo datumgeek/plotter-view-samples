@@ -3,7 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var GlobeView = (function () {
         function GlobeView() {
         }
-        GlobeView.prototype.activate = function () {
+        GlobeView.prototype.attached = function () {
             window.require([
                 "esri/Map",
                 "esri/views/SceneView",

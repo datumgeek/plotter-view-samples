@@ -3,7 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var Windmills = (function () {
         function Windmills() {
         }
-        Windmills.prototype.activate = function () {
+        Windmills.prototype.attached = function () {
             window.require([
                 "esri/core/declare",
                 "esri/Map",
