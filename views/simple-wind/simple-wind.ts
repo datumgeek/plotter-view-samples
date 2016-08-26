@@ -12,6 +12,9 @@ export class Uswind {
             "esri/symbols/SimpleMarkerSymbol",
             "esri/widgets/Legend",
             "esri/request",
+            "esri/SpatialReference",
+            "esri/geometry/webMercatorUtils",
+            "esri/graphic",
             "dojo/_base/array",
             "dojo/dom",
             "dojo/on",
@@ -27,6 +30,7 @@ export class Uswind {
                 SimpleMarkerSymbol, 
                 Legend, 
                 esriRequest,
+                SpatialReference,
                 arrayUtils, 
                 dom, 
                 on

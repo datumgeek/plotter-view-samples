@@ -3,8 +3,8 @@ define(["require", "exports"], function (require, exports) {
     var Uswind = (function () {
         function Uswind() {
             this.colDef = {
-                x: 18,
-                y: 17,
+                x: 19,
+                y: 18,
                 FID: 0,
                 unique_id: 1,
                 site_name: 2,
