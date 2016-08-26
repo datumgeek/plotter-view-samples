@@ -1,0 +1,9 @@
+<template>
+    <require from="./wind-farm-top-ten.css"></require>
+
+    <h2>Top Ten Wind Farms</h2>
+    <p>(From OpenEI)</p>
+    <ul>
+        <li repeat.for="farm of farms" click.trigger="launchWindFarmDetails(farm)>${Name}</li>
+    </ul>
+</template>

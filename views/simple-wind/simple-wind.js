@@ -3,8 +3,8 @@ define(["require", "exports"], function (require, exports) {
     var Uswind = (function () {
         function Uswind() {
             this.colDef = {
-                x: 19,
-                y: 18,
+                x: 18,
+                y: 17,
                 FID: 0,
                 unique_id: 1,
                 site_name: 2,
@@ -52,11 +52,14 @@ define(["require", "exports"], function (require, exports) {
                 "esri/symbols/SimpleMarkerSymbol",
                 "esri/widgets/Legend",
                 "esri/request",
+                "esri/SpatialReference",
+                "esri/geometry/webMercatorUtils",
+                "esri/graphic",
                 "dojo/_base/array",
                 "dojo/dom",
                 "dojo/on",
                 "dojo/domReady!"
-            ], function (MapView, Map, FeatureLayer, Field, Point, SimpleRenderer, SimpleMarkerSymbol, Legend, esriRequest, arrayUtils, dom, on) {
+            ], function (MapView, Map, FeatureLayer, Field, Point, SimpleRenderer, SimpleMarkerSymbol, Legend, esriRequest, SpatialReference, arrayUtils, dom, on) {
                 var myGraphics = [];
                 for (var ii = 0; ii < that.windArray.length; ii++) {
                     myGraphics.push({
